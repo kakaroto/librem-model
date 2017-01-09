@@ -24,12 +24,29 @@ module rubber_foot() {
   }
 }
 
-module bottom_corner() {
+module rounded_corner() {
   hull() {
     translate([15*1.5, 15*1.5, 0])
-      cylinder(h=5, r1=15*1.5, r2=15/2, $fn=50);
+      cylinder(h=4, r1=15*1.5, r2=15/2, $fn=50);
     translate([9, 9, 0])
-      cylinder(h=3, r1=9, r2=1, $fn=50);
+      cylinder(h=2, r1=9, r2=1, $fn=50);
+  }
+}
+
+module rounded_plate(thickness=0) {
+  union() {
+    hull () {
+      translate([0, 0, thickness]) rounded_corner();
+      translate([325, 217, thickness]) rotate([0, 0, 180]) rounded_corner();
+      translate([325, 0, thickness]) rotate([0, 0, 90]) rounded_corner();
+      translate([0, 217, thickness]) rotate([0, 0, 270]) rounded_corner();
+    }
+    hull() {
+      translate([9, 9, 0]) cylinder(h=thickness, r=9);
+      translate([325-9, 217-9, 0]) cylinder(h=thickness, r=9);
+      translate([325-9, 9, 0]) cylinder(h=thickness, r=9);
+      translate([9, 217-9, 0]) cylinder(h=thickness, r=9);
+    }
   }
 }
 
@@ -37,17 +54,15 @@ module bottom () {
   difference() {
     // The hull
     union() {
-      color("silver") hull () {
-        translate([0, 0, 0]) bottom_corner();
-        translate([325, 217, 0]) rotate([0, 0, 180]) bottom_corner();
-        translate([325, 0, 0]) rotate([0, 0, 90]) bottom_corner();
-        translate([0, 217, 0]) rotate([0, 0, 270])bottom_corner();
+      difference() {
+        color("silver") rounded_plate(0.75);
+        color("silver") rounded_plate(0);
       }
       // The rubber feet
-      translate([17.5, 17.5, 5]) rubber_foot();
-      translate([325-17.5*2, 17.5, 5]) rubber_foot();
-      translate([325-17.5*2, 217-17.5*2, 5]) rubber_foot();
-      translate([17.5, 217-17.5*2, 5]) rubber_foot();
+      translate([17.5, 17.5, 4.75]) rubber_foot();
+      translate([325-17.5*2, 17.5, 4.75]) rubber_foot();
+      translate([325-17.5*2, 217-17.5*2, 4.75]) rubber_foot();
+      translate([17.5, 217-17.5*2, 4.75]) rubber_foot();
     }
     // The screen cover space
     translate([35, 0, 0]) cube([325-70, 7.75, 5]);
