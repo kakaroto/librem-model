@@ -244,8 +244,62 @@ module screen () {
   }
 }
 
-screen();
-//translate([0, 0, 10]) screen_hole();
+module trackpad() {
+  hull() {
+    translate([3, 3, 0]) cylinder(h=1, r=3);
+    translate([95-3, 3, 0]) cylinder(h=1, r=3);
+    translate([95-3, 62-3, 0]) cylinder(h=1, r=3);
+    translate([3, 62-3, 0]) cylinder(h=1, r=3);
+  }
+}
 
-//rounded_corner();
+module keyboard_hole() {
+  hull() {
+    translate([3, 3, 0]) cylinder(h=2, r2=3);
+    translate([280-3, 3, 0]) cylinder(h=2, r2=3);
+    translate([280-3, 114-3, 0]) cylinder(h=2, r2=3);
+    translate([3, 114-3, 0]) cylinder(h=2, r2=3);
+  }
+}
+
+module base() {
+  union() {
+    difference() {
+      color(MAIN_COLOR) hull() {
+        translate([9, 9, 0]) cylinder(h=8.25, r=9);
+        translate([MAIN_WIDTH-9, 9, 0]) cylinder(h=8.25, r=9);
+        translate([MAIN_WIDTH-9, MAIN_DEPTH-9, 0]) cylinder(h=2.5, r=9);
+        translate([9, MAIN_DEPTH-9, 0]) cylinder(h=2.5, r=9);
+      }
+      // The screen cover space
+      translate([35+1, 0, -eta]) cube([MAIN_WIDTH-70, 7.75, 8.25+2*eta]);
+      // Cover notch
+      translate([(MAIN_WIDTH-COVER_NOTCH_LENGTH-2-COVER_NOTCH_CURVATURE*2)/2, MAIN_DEPTH-COVER_NOTCH_DEPTH, -eta]) cover_notch(COVER_NOTCH_LENGTH+2);
+      // Trackpad
+      translate([116, 147, 4]) rotate([-1.639, 0, 0]) trackpad();
+      translate([23.5, 27.5, 6]) rotate([-1.639, 0, 0]) keyboard_hole();
+    }
+    translate([116, 147, 3.5]) rotate([-1.639, 0, 0]) trackpad();
+  }
+}
+
+module laptop(open=0.0) {
+  bottom_height = CORNER_MAX_HEIGHT+BOTTOM_THICKNESS+RUBBER_FOOT_DEPTH;
+  translate([(MAIN_WIDTH-BOTTOM_WIDTH)/2, (MAIN_DEPTH-BOTTOM_DEPTH)/2, bottom_height]) mirror([0, 0, 1]) bottom(); 
+  translate([0, 0, bottom_height]) base();
+  translate([0, SCREEN_SWIVEL_DEPTH/2, 10.5/2+RUBBER_FOOT_DEPTH+3]) rotate([120*open-1.639, 0, 0]) translate([0, -SCREEN_SWIVEL_DEPTH/2, 10.5/2]) screen();
+}
+
+ 
+module animate_laptop() {
+  if ($t < 0.5)
+    laptop($t*2);
+  else
+    laptop(2*(1.0-$t));
+}
+
+//base();
 //bottom();
+//screen();
+//laptop(1.0);
+animate_laptop();
