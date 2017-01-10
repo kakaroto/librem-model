@@ -82,5 +82,86 @@ module bottom () {
   }
 }
 
-bottom();
+module screen_swivel() {
+  intersection() {
+    hull() {
+      cube([255, 7.75, 8.5]);
+      translate([0, 4, 0]) cube([255, 4, 10.5]);
+    }
+    hull() {
+      translate([0, 0, 3]) sphere(r=8.5);
+      translate([255, 0, 3]) sphere(r=8.5);
+    }
+  }
+}
 
+module screen_bezel() {
+  difference() {
+    hull() {
+      translate([9+1, 9+8.75, 0]) cylinder(h=0.9, r=9);
+      translate([325-9-1, 217-9-1, 0]) cylinder(h=0.9, r=9);
+      translate([325-9-1, 9+8.75, 0]) cylinder(h=0.9, r=9);
+      translate([9+1, 217-9-1, 0]) cylinder(h=0.9, r=9);
+    }
+    hull() {
+      translate([9+1, 9+8.75, 0]) cylinder(h=1, r=8);
+      translate([325-9-1, 217-9-1, 0]) cylinder(h=1, r=8);
+      translate([325-9-1, 9+8.75, 0]) cylinder(h=1, r=8);
+      translate([9+1, 217-9-1, 0]) cylinder(h=1, r=8);
+    }
+  }
+}
+
+module screen_hole() {
+  difference() {
+    rounded_plate(0);
+    difference() {
+      hull() {
+        translate([9, 9, 0]) cylinder(h=2, r=9);
+        translate([325-9, 217-9, 0]) cylinder(h=2, r=9);
+        translate([325-9, 9, 0]) cylinder(h=2, r=9);
+        translate([9, 217-9, 0]) cylinder(h=2, r=9);
+      }
+      hull() {
+        translate([9, 9, 0]) cylinder(h=2, r=8);
+        translate([325-9, 217-9, 0]) cylinder(h=2, r=8);
+        translate([325-9, 9, 0]) cylinder(h=2, r=8);
+        translate([9, 217-9, 0]) cylinder(h=2, r=8);
+      }
+    }
+    hull() {
+      translate([9+1, 9+8.75, 0]) cylinder(h=5, r=9);
+      translate([325-9-1, 217-9-1, 0]) cylinder(h=5, r=9);
+      translate([325-9-1, 9+8.75, 0]) cylinder(h=5, r=9);
+      translate([9-1, 217-9-1, 0]) cylinder(h=5, r=9);
+    }
+    translate([35, 0, 0]) cube([325-70, 8.5, 5]);
+  }
+}
+
+module screen () {
+  difference() {
+    union() {
+      // The hull
+      color("silver") rounded_plate(2.0);
+
+      // The screen swivel
+      color("black") translate([35, 0, 0]) mirror([0, 0, 1]) screen_swivel();
+
+      // The rubber bezel
+      color("black") mirror([0, 0, 1]) screen_bezel();
+    }
+    screen_hole();
+    // The actual screen
+    translate([16, 31, 0]) cube([325-16*2, 217-31-21, 0.75]);
+    // The camera
+    translate([325/2, 217-13.5, 0]) cylinder(h=0, r=3.5/2);
+    
+  }
+}
+
+screen();
+//translate([0, 0, 10]) screen_hole();
+
+//rounded_corner();
+//bottom();
