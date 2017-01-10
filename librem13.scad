@@ -15,7 +15,7 @@ CORNER_CURVATURE2=0.1;
 CORNER_HEIGHT=2;
 CORNER_MAX_HEIGHT=4;
 CORNER_MAX_CURVATURE=15*1.5;
-CORNER_MAX_CURVATURE2=15/2;
+CORNER_MAX_POS=15;
 BOTTOM_WIDTH=325;
 BOTTOM_DEPTH=217;
 BOTTOM_THICKNESS=0.75;
@@ -60,8 +60,11 @@ module rubber_foot() {
 
 module rounded_corner() {
   hull() {
-    translate([CORNER_MAX_CURVATURE, CORNER_MAX_CURVATURE, 0])
-      cylinder(h=CORNER_MAX_HEIGHT, r1=CORNER_MAX_CURVATURE, r2=CORNER_MAX_CURVATURE2, $fn=50);
+    difference() {
+      translate([CORNER_MAX_POS, CORNER_MAX_POS, -CORNER_MAX_CURVATURE+CORNER_MAX_HEIGHT])
+        sphere(r=CORNER_MAX_CURVATURE, $fn=100);
+      translate([-100, -100, -200]) cube([200, 200, 200]);
+    }
     translate([CORNER_CURVATURE, CORNER_CURVATURE, 0])
       cylinder(h=CORNER_HEIGHT, r1=CORNER_CURVATURE, r2=CORNER_CURVATURE2);
   }
@@ -298,8 +301,8 @@ module animate_laptop() {
     laptop(2*(1.0-$t));
 }
 
-//base();
 //bottom();
+//base();
 //screen();
 //laptop(1.0);
 animate_laptop();
