@@ -281,6 +281,28 @@ module base() {
       // Trackpad
       translate([116, 147, 4]) rotate([-1.639, 0, 0]) trackpad();
       translate([23.5, 27.5, 6]) rotate([-1.639, 0, 0]) keyboard_hole();
+      // DC IN. a 3.5mm hole with black plastic case around it of 5mm radius
+      translate([0, 14.5+3.5/2, 4.4]) rotate([0, 90, 0]) cylinder(h=1, r=3.5/2);
+      translate([0, 14.5+5/2, 4.4]) rotate([0, 90, 0]) cylinder(h=1, r=5/2);
+      // small hole next to usb, microphone ?
+      translate([0, 23, 4.25]) rotate([0, 90, 0]) cylinder(h=1, r=1.25/2);
+      // USB3
+      translate([0, 27, 1.5]) rotate([-1.639, 0, 0]) cube([1, 12.9, 5]);
+      // small hole next to usb, no idea what ?
+      translate([0, 44, 3.5]) rotate([0, 90, 0]) cylinder(h=1, r=1.25/2);
+      // HDMI
+      translate([0, 47.5, 2.35]) rotate([-1.639, 0, 0]) cube([1, 11, 3]);
+      // no idea
+      translate([0, 65, 1.75]) rotate([-1.639, 0, 0]) cube([1, 16.35, 3]);
+
+      // Left side USB3
+      translate([MAIN_WIDTH-0.9, 19, 1.5]) rotate([-1.639, 0, 0]) cube([1, 12.9, 5]);
+      // Left side switches (TO BE MOVED)
+      translate([MAIN_WIDTH-0.9, 36.5, 2]) rotate([-1.639, 0, 0]) cube([1, 24.75, 2.75]);
+      // Left side headphone jack
+      translate([MAIN_WIDTH-0.9, 69, 3.5]) rotate([0, 90, 0]) cylinder(h=1, r=2);
+      // microphone
+      translate([MAIN_WIDTH-0.9, 79, 2.75]) rotate([0, 90, 0]) cylinder(h=1, r=1.25/2);
     }
     translate([116, 147, 3.5]) rotate([-1.639, 0, 0]) trackpad();
   }
